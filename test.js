@@ -18,6 +18,53 @@ test('ignore unknown classes', t => {
 	});
 });
 
+test('with media queries and no window width provides', t => {
+	t.throws(() => tailwind('text-blue-500 sm:text-gray-100'), {instanceOf: Error});
+});
+
+test('with media queries, default should be selected', t => {
+	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100', 352), {
+		color: 'rgba(66, 153, 225, 1)'
+	});
+});
+
+test('with media queries, sm should be selected', t => {
+	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100', 640), {
+		color: 'rgba(247, 250, 252, 1)'
+	});
+});
+
+test('with media queries, md should be selected', t => {
+	t.deepEqual(tailwind('text-blue-500 text-justify sm:text-gray-100', 810), {
+		color: 'rgba(247, 250, 252, 1)',
+		textAlign: 'justify'
+	});
+});
+
+test('with media queries, lg should be selected', t => {
+	t.deepEqual(tailwind('text-blue-500 text-justify sm:text-gray-100 lg:text-gray-200 xl:text-gray-300', 1024), {
+		color: 'rgba(237, 242, 247, 1)',
+		textAlign: 'justify'
+	});
+});
+
+test('with media queries, xl should be selected', t => {
+	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1 xl:tracking-wide', 1280), {
+		color: 'rgba(247, 250, 252, 1)',
+		width: 4,
+		zIndex: 10,
+		letterSpacing: '0.025em'
+	});
+});
+
+test('with media queries, all should be selected', t => {
+	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1', 1280), {
+		color: 'rgba(247, 250, 252, 1)',
+		width: 4,
+		zIndex: 10
+	});
+});
+
 test('support color opacity', t => {
 	t.deepEqual(
 		tailwind(
