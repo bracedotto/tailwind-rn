@@ -6,22 +6,16 @@ const postcss = require('postcss');
 const tailwind = require('tailwindcss');
 const build = require('./build');
 
-meow(`
+const cli = meow(`
 	Usage
-	  $ create-tailwind-rn
+	  $ create-tailwind-rn <input> <output>
 `);
 
-const source = `
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-`;
-
 postcss([tailwind])
-	.process(source, {from: undefined})
+	.process(fs.readFileSync(cli.input[0]), {from: undefined})
 	.then(({css}) => {
 		const styles = build(css);
-		fs.writeFileSync('styles.json', JSON.stringify(styles, null, '\t'));
+		fs.writeFileSync(cli.input[1], JSON.stringify(styles, null, '\t'));
 	})
 	.catch(error => {
 		console.error('> Error occurred while generating styles');
