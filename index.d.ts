@@ -3,6 +3,6 @@ export function getColor(color: string): string;
 export function create(
 	styles: object
 ): {
-	tailwind: (classNames: string) => {[key: string]: string};
+	tailwind: (classNames: string, windowWidth?: number) => {[key: string]: string};
 	getColor: (color: string) => string;
 };
