@@ -49,11 +49,22 @@ test('with media queries, lg should be selected', t => {
 });
 
 test('with media queries, xl should be selected', t => {
-	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1 xl:tracking-wide', 1280), {
+	t.deepEqual(tailwind('text-lg text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1 xl:tracking-wide', 1280), {
 		color: 'rgba(247, 250, 252, 1)',
 		width: 4,
 		zIndex: 10,
-		letterSpacing: '0.025em'
+		fontSize: 18,
+		letterSpacing: 0.45
+	});
+});
+
+test('with media queries, xl should be selected (font size provided)', t => {
+	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1 xl:text-lg xl:tracking-wide', 1280), {
+		color: 'rgba(247, 250, 252, 1)',
+		width: 4,
+		zIndex: 10,
+		fontSize: 18,
+		letterSpacing: 0.45
 	});
 });
 

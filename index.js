@@ -65,17 +65,12 @@ const create = tailwindStyles => {
 	// Pass a list of class names separated by a space, for example:
 	// "bg-green-100 text-green-800 font-semibold")
 	// and receive a styles object for use in React Native views
-
 	const tailwind = (classNames, windowWidth = null) => {
-
 		const style = {};
 
 		if (!classNames) {
 			return style;
 		}
-
-		addFontVariant(style, classNames);
-		addLetterSpacing(tailwindStyles, style, classNames);
 
 		// TODO: Should not hard-coded, should make them configurable
 		const maxWidthKeys = ['sm:', 'md:', 'lg:', 'xl:'];
@@ -86,11 +81,7 @@ const create = tailwindStyles => {
 			throw new Error(`Found media queries usage without windowWidth: ${windowWidth}`);
 		}
 
-		classNames = classNames
-			.replace(/\s+/g, ' ')
-			.trim()
-			.split(' ')
-			.filter(className => !className.startsWith('tracking-'));
+		classNames = classNames.replace(/\s+/g, ' ').trim().split(' ');
 
 		if (haveMaxWidthKeys) {
 			// Sort by sm:, md:, lg:, and xl:
@@ -114,7 +105,19 @@ const create = tailwindStyles => {
 			});
 		}
 
-		for (const className of classNames) {
+		classNames = classNames.join(' ');
+
+		addFontVariant(style, classNames);
+		addLetterSpacing(tailwindStyles, style, classNames);
+
+		const separateClassNames = classNames
+			.replace(/\s+/g, ' ')
+			.trim()
+			.split(' ')
+			.filter(className => !className.startsWith('tracking-'))
+			.filter(className => !['oldstyle-nums', 'lining-nums', 'tabular-nums', 'proportional-nums'].includes(className));
+
+		for (const className of separateClassNames) {
 			if (tailwindStyles[className]) {
 				Object.assign(style, tailwindStyles[className]);
 			} else {
