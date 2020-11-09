@@ -1,6 +1,6 @@
 {
 	"name": "tailwind-rn",
-	"version": "1.1.1",
+	"version": "2.0.1",
 	"description": "Use Tailwind CSS in React Native projects",
 	"license": "MIT",
 	"repository": "vadimdemedes/tailwind-rn",
@@ -35,9 +35,10 @@
 	"dependencies": {
 		"css": "^2.2.4",
 		"css-to-react-native": "^3.0.0",
+		"match-all": "^1.2.6",
 		"meow": "^7.0.1",
 		"postcss": "^7.0.30",
-		"tailwindcss": "^1.2.0"
+		"tailwindcss": "^1.8.10"
 	},
 	"devDependencies": {
 		"@ava/babel": "^1.0.1",
