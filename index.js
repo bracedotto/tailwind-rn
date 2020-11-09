@@ -62,6 +62,8 @@ const addLetterSpacing = (tailwindStyles, style, classNames) => {
 };
 
 const create = tailwindStyles => {
+	const cache = {};
+
 	// Pass a list of class names separated by a space, for example:
 	// "bg-green-100 text-green-800 font-semibold")
 	// and receive a styles object for use in React Native views
@@ -83,14 +85,15 @@ const create = tailwindStyles => {
 
 		classNames = classNames.replace(/\s+/g, ' ').trim().split(' ');
 
-		if (haveMaxWidthKeys) {
-			// Sort by sm:, md:, lg:, and xl:
-			classNames.sort((first, second) => {
-				const firstWeight = maxWidthKeys.indexOf(first.slice(0, 3));
-				const secondWeight = maxWidthKeys.indexOf(second.slice(0, 3));
-				return firstWeight - secondWeight;
-			});
+		// Sort by alphabets and sm:, md:, lg:, and xl:
+		const c1 = classNames.filter(c => !maxWidthKeys.includes(c.slice(0, 3))).sort();
+		const c2 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[0]).sort();
+		const c3 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[1]).sort();
+		const c4 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[2]).sort();
+		const c5 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[3]).sort();
+		classNames = [...c1, ...c2, ...c3, ...c4, ...c5];
 
+		if (haveMaxWidthKeys) {
 			// Filter out class names based on windowWidth
 			const i = maxWidthValues.map(maxWidth => windowWidth >= maxWidth ? 1 : 0).reduce((a, b) => a + b, 0);
 			classNames = classNames.filter(className => {
@@ -106,6 +109,10 @@ const create = tailwindStyles => {
 		}
 
 		classNames = classNames.join(' ');
+
+		if (classNames in cache) {
+			return cache[classNames];
+		}
 
 		addFontVariant(style, classNames);
 		addLetterSpacing(tailwindStyles, style, classNames);
@@ -125,7 +132,8 @@ const create = tailwindStyles => {
 			}
 		}
 
-		return useVariables(style);
+		cache[classNames] = useVariables(style);
+		return cache[classNames];
 	};
 
 	// Pass the name of a color (e.g. "blue-500") and receive a color value (e.g. "#4399e1")

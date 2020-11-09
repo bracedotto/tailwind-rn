@@ -76,6 +76,12 @@ test('with media queries, all should be selected', t => {
 	});
 });
 
+test('with media queries, cannot sort media queries, wider needs to override', t => {
+	t.deepEqual(tailwind('z-20 lg:z-10', 1280), {
+		zIndex: 10
+	});
+});
+
 test('support color opacity', t => {
 	t.deepEqual(
 		tailwind(
@@ -152,10 +158,10 @@ test('support font-variant-numeric', t => {
 		tailwind('oldstyle-nums lining-nums tabular-nums proportional-nums'),
 		{
 			fontVariant: [
-				'oldstyle-nums',
 				'lining-nums',
-				'tabular-nums',
-				'proportional-nums'
+				'oldstyle-nums',
+				'proportional-nums',
+				'tabular-nums'
 			]
 		}
 	);
