@@ -62,16 +62,17 @@ const addLetterSpacing = (tailwindStyles, style, classNames) => {
 };
 
 const create = tailwindStyles => {
-	const cache = {};
+	const cache = {
+		'': {},
+	};
 
 	// Pass a list of class names separated by a space, for example:
 	// "bg-green-100 text-green-800 font-semibold")
 	// and receive a styles object for use in React Native views
 	const tailwind = (classNames, windowWidth = null) => {
-		const style = {};
 
 		if (!classNames) {
-			return style;
+			return cache[''];
 		}
 
 		// TODO: Should not hard-coded, should make them configurable
@@ -110,10 +111,17 @@ const create = tailwindStyles => {
 
 		classNames = classNames.join(' ');
 
+		if (!classNames) {
+			return cache[''];
+		}
 		if (classNames in cache) {
 			return cache[classNames];
 		}
 
+		const style = {};
+
+		// TODO: Bug in the two following methods not replace previous style
+		//   with later style as sorted by media queries.
 		addFontVariant(style, classNames);
 		addLetterSpacing(tailwindStyles, style, classNames);
 
@@ -128,7 +136,7 @@ const create = tailwindStyles => {
 			if (tailwindStyles[className]) {
 				Object.assign(style, tailwindStyles[className]);
 			} else {
-				console.warn(`Unsupported Tailwind class: "${className}"`);
+				console.warn(`Unsupported Tailwind class: "${className}" from classNames ${classNames}`);
 			}
 		}
 
