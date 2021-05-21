@@ -24,53 +24,55 @@ test('with media queries and no window width provides', t => {
 
 test('with media queries, default should be selected', t => {
 	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100', 352), {
-		color: 'rgba(66, 153, 225, 1)'
+		color: 'rgba(59, 130, 246, 1)'
 	});
 });
 
 test('with media queries, sm should be selected', t => {
 	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100', 640), {
-		color: 'rgba(247, 250, 252, 1)'
+		color: 'rgba(243, 244, 246, 1)'
 	});
 });
 
 test('with media queries, md should be selected', t => {
 	t.deepEqual(tailwind('text-blue-500 text-justify sm:text-gray-100', 810), {
-		color: 'rgba(247, 250, 252, 1)',
+		color: 'rgba(243, 244, 246, 1)',
 		textAlign: 'justify'
 	});
 });
 
 test('with media queries, lg should be selected', t => {
 	t.deepEqual(tailwind('text-blue-500 text-justify sm:text-gray-100 lg:text-gray-200 xl:text-gray-300', 1024), {
-		color: 'rgba(237, 242, 247, 1)',
+		color: 'rgba(229, 231, 235, 1)',
 		textAlign: 'justify'
 	});
 });
 
 test('with media queries, xl should be selected', t => {
 	t.deepEqual(tailwind('text-lg text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1 xl:tracking-wide', 1280), {
-		color: 'rgba(247, 250, 252, 1)',
+		color: 'rgba(243, 244, 246, 1)',
 		width: 4,
 		zIndex: 10,
 		fontSize: 18,
+		lineHeight: 28,
 		letterSpacing: 0.45
 	});
 });
 
 test('with media queries, xl should be selected (font size provided)', t => {
 	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1 xl:text-lg xl:tracking-wide', 1280), {
-		color: 'rgba(247, 250, 252, 1)',
+		color: 'rgba(243, 244, 246, 1)',
 		width: 4,
 		zIndex: 10,
 		fontSize: 18,
+		lineHeight: 28,
 		letterSpacing: 0.45
 	});
 });
 
 test('with media queries, all should be selected', t => {
 	t.deepEqual(tailwind('text-blue-500 sm:text-gray-100 md:w-0 md:z-10 lg:w-1', 1280), {
-		color: 'rgba(247, 250, 252, 1)',
+		color: 'rgba(243, 244, 246, 1)',
 		width: 4,
 		zIndex: 10
 	});
@@ -205,6 +207,38 @@ test('support letter spacing', t => {
 	t.deepEqual(tailwind('text-base tracking-widest'), {
 		fontSize: 16,
 		letterSpacing: 1.6,
+		lineHeight: 24
+	});
+});
+
+test('support leading behind text', t => {
+	t.deepEqual(tailwind('text-base leading-3'), {
+		fontSize: 16,
+		lineHeight: 12
+	});
+
+	t.deepEqual(tailwind('leading-10 text-base'), {
+		fontSize: 16,
+		lineHeight: 40
+	});
+
+	t.deepEqual(tailwind('lg:leading-10 text-base', 320), {
+		fontSize: 16,
+		lineHeight: 24
+	});
+
+	t.deepEqual(tailwind('lg:leading-10 text-base', 1320), {
+		fontSize: 16,
+		lineHeight: 40
+	});
+
+	t.deepEqual(tailwind('text-sm leading-10 lg:text-base', 320), {
+		fontSize: 14,
+		lineHeight: 40
+	});
+
+	t.deepEqual(tailwind('text-sm leading-10 lg:text-base', 1320), {
+		fontSize: 16,
 		lineHeight: 24
 	});
 });

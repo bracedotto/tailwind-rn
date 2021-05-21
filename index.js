@@ -61,16 +61,30 @@ const addLetterSpacing = (tailwindStyles, style, classNames) => {
 	style.letterSpacing = Number.parseFloat(letterSpacing) * fontSize;
 };
 
+// The leading-x needs to be behind text-x to override line height from text-x.
+const putLeadingToTheBack = (classNames, maxWidthKey) => {
+	const leadingNames = [];
+	const otherNames = [];
+	for (const name of classNames) {
+		if (name.startsWith(maxWidthKey + 'leading-')) {
+			leadingNames.push(name);
+		} else {
+			otherNames.push(name);
+		}
+	}
+
+	return [...otherNames, ...leadingNames];
+};
+
 const create = tailwindStyles => {
 	const cache = {
-		'': {},
+		'': {}
 	};
 
 	// Pass a list of class names separated by a space, for example:
 	// "bg-green-100 text-green-800 font-semibold")
 	// and receive a styles object for use in React Native views
 	const tailwind = (classNames, windowWidth = null) => {
-
 		if (!classNames) {
 			return cache[''];
 		}
@@ -87,12 +101,19 @@ const create = tailwindStyles => {
 		classNames = classNames.replace(/\s+/g, ' ').trim().split(' ');
 
 		// Sort by alphabets and sm:, md:, lg:, and xl:
+		//   except leading-x needs to be behind text-x.
 		const c1 = classNames.filter(c => !maxWidthKeys.includes(c.slice(0, 3))).sort();
 		const c2 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[0]).sort();
 		const c3 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[1]).sort();
 		const c4 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[2]).sort();
 		const c5 = classNames.filter(c => c.slice(0, 3) === maxWidthKeys[3]).sort();
-		classNames = [...c1, ...c2, ...c3, ...c4, ...c5];
+		classNames = [
+			...putLeadingToTheBack(c1, ''),
+			...putLeadingToTheBack(c2, maxWidthKeys[0]),
+			...putLeadingToTheBack(c3, maxWidthKeys[1]),
+			...putLeadingToTheBack(c4, maxWidthKeys[2]),
+			...putLeadingToTheBack(c5, maxWidthKeys[3])
+		];
 
 		if (haveMaxWidthKeys) {
 			// Filter out class names based on windowWidth
@@ -114,6 +135,7 @@ const create = tailwindStyles => {
 		if (!classNames) {
 			return cache[''];
 		}
+
 		if (classNames in cache) {
 			return cache[classNames];
 		}
