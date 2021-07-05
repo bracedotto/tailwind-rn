@@ -111,6 +111,28 @@ const isUtilitySupported = (utility, rule) => {
 	) {
 		return false;
 	}
+	if (
+		utility.startsWith('decoration-') ||
+		utility.startsWith('isolate') ||
+		utility.startsWith('mix-blend-') ||
+		utility.startsWith('bg-blend-') ||
+		utility.startsWith('filter') ||
+		utility.startsWith('blur') ||
+		utility.startsWith('brightness-') ||
+		utility.startsWith('contrast-') ||
+		utility.startsWith('drop-shadow') ||
+		utility.startsWith('grayscale') ||
+		utility.startsWith('hue-rotate-') ||
+		utility.startsWith('-hue-rotate-') ||
+		utility.startsWith('invert') ||
+		utility.startsWith('saturate-') ||
+		utility.startsWith('sepia') ||
+		utility.startsWith('backdrop-') ||
+		utility.startsWith('-backdrop-') ||
+		utility.startsWith('ring-')
+	) {
+		return false;
+	}
 
 	// Skip utilities with unsupported properties
 	for (const {property, value} of rule.declarations) {
@@ -145,28 +167,6 @@ const isUtilitySupported = (utility, rule) => {
 		) {
 			return false;
 		}
-	}
-
-	if (
-		utility.startsWith('decoration-') ||
-		utility.startsWith('isolate') ||
-		utility.startsWith('mix-blend-') ||
-		utility.startsWith('bg-blend-') ||
-		utility.startsWith('filter') ||
-		utility.startsWith('blur') ||
-		utility.startsWith('brightness-') ||
-		utility.startsWith('contrast-') ||
-		utility.startsWith('drop-shadow') ||
-		utility.startsWith('grayscale') ||
-		utility.startsWith('hue-rotate-') ||
-		utility.startsWith('-hue-rotate-') ||
-		utility.startsWith('invert') ||
-		utility.startsWith('saturate-') ||
-		utility.startsWith('sepia') ||
-		utility.startsWith('backdrop-') ||
-		utility.startsWith('-backdrop-')
-	) {
-		return false;
 	}
 
 	return true;
