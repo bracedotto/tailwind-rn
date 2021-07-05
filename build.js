@@ -111,6 +111,7 @@ const isUtilitySupported = (utility, rule) => {
 	) {
 		return false;
 	}
+
 	if (
 		utility.startsWith('decoration-') ||
 		utility.startsWith('isolate') ||
@@ -182,6 +183,12 @@ module.exports = source => {
 		if (rule.type === 'rule') {
 			for (const selector of rule.selectors) {
 				const utility = selector.replace(/^\./, '').replace('\\', '');
+
+				if (['text-5xl', 'text-6xl', 'text-7xl', 'text-8xl', 'text-9xl'].includes(utility)) {
+					const lineHeight = rule.declarations.find(d => d.property === 'line-height');
+					const fontSize = rule.declarations.find(d => d.property === 'font-size');
+					lineHeight.value = fontSize.value;
+				}
 
 				if (isUtilitySupported(utility, rule)) {
 					styles[utility] = getStyles(rule);
