@@ -19,6 +19,10 @@ const getStyles = rule => {
 				return [property, remToPx(value)];
 			}
 
+			if (property === 'flex' && value === '1 1 0%') {
+				value = '1 1 0';
+			}
+
 			return [property, value];
 		});
 
